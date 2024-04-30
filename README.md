@@ -62,6 +62,31 @@ Therefore, by running `swarmfuzzbinary(200, 201, 5, 5)`, we are fuzzing the 5-dr
     - In the file `parameters/param_swarm.m`, change the variable `p_swarm.nb_agents`.
     - In the file `@Swarm/Swarm.m`, in the function `get_colors(self)`, change `colors` to be an array with 10/15 rows. You can specify the color as you like.
 
+## Collision cases found by SwarmFuzzBinary
+
+Some collision cases found by SwarmFuzzBinary are stored in folder `./results`. The results for two tested algorithms (i.e., [Olfati-Saber](https://www.sciencedirect.com/science/article/pii/S1474667015386651) and the [Vicsek](https://www.science.org/doi/full/10.1126/scirobotics.aat3536) algorithms) are stored in seperate folders under `./results`.  
+
+An example of the result for Olfati-Saber algorithm in the 5m GPS spoofing setting looks like this:
+```
+- RQ1_Olfati_Saber
+    - 5drones
+        - 5m-dev
+            - param
+                - gpsParam_csv200.csv
+            - seed
+                - seedpool200.csv
+            - tmp
+                - paramTmp_csv200.csv
+```
+The most important information is in `gpsParam_csv{seed}.csv` as it contains the GPS spoofing parameters found by SwarmFuzzBinary. Each row follows the format of 
+
+`[collision, seed, GPS spoofing deviation, target drone, victim drone1 (, victim drone2 ), GPS spoofing start time, GPS spoofing duration]`.
+
+For example, `[1,200,5,1,5,4,0,0.185546875]` means that, *for the mission with seed 200, collision between drone 5 and drone 4 occurs when drone 1 is under the 5m GPS spoofing starting at 0s, with the duration of 0.185546875s*. 
+
+`seedpool{seed}.csv` and `paramTmp_csv{seed}.csv` contain some intermediate results during fuzzing. Interested readers could refer to the [./fuzz/seed_generation/drone_candidates.m](https://github.com/DependableSystemsLab/SwarmFuzz/blob/swarmfuzzbinary/fuzz/seed_generation/drone_candidates.m#L218) for the interpretation.
+
+
 
 ## Contact
 For questions about our paper or this code, please open an issue or contact Elaine Yao (elainedv111@gmail.com)
